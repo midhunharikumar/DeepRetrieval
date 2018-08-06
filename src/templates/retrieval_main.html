@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+ 
+<div class="block1">
+<h1>Hello {{name}}!</h1>
+  <h2>Here is an interesting Image for you: </h2>
+  <p>
+{{ url_for('static',filename= random_image ) }}
+  </p>
+<img src={{ url_for('static',filename= random_image )}}>
+</div>
+{% endblock %}
