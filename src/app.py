@@ -44,6 +44,7 @@ def index():
 			file = request.files.get(f)
 			filename = photos.save(file, name=file.filename)
 			file_urls.append(photos.url(filename))
+			print(filename)
 		session['file_urls'] = file_urls
 		return "uploading"
 	return render_template('index.html')
@@ -57,8 +58,8 @@ def results():
 
 	file_urls = session['file_urls']
 	session.pop('file_urls',None)
-	print(file_urls[0])
-	return deepretrieval(os.path.join('./uploads',file_urls[0].split('/')[-1].split('_')[0]))
+	print(file_urls)
+	return deepretrieval(os.path.join('./uploads',file_urls[0].split('/')[-1]))
 	#return render_template('deepretrieval.html',name=file_urls[0])
 
 
