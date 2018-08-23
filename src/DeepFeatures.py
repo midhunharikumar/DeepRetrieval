@@ -23,8 +23,6 @@ class DeepFeatures():
                                                                 input_tensor=None, input_shape=None, pooling=None, classes=1000)
         if feature_type['model'] == 'custom':
             self.load_custom_model(os.getcwd())
-        print('Imported Model Summary')
-        print(self.feature_model.summary())
         self.graph = tf.get_default_graph()
         self.load_intermediate_model(feature_type['output_layer'])
 
@@ -78,7 +76,6 @@ class DeepFeatures():
 def batch_feature(folder_name):
     gs = GraphSearch()
     # TODO Remove all hard links.
-    files = glob.glob(os.path.join(folder_name, '**/*.jpg'))
     print(len(files))
     feature_store = []
     df = DeepFeatures(feature_type={
