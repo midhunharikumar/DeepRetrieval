@@ -21,7 +21,7 @@ app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
 app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
-# TODO this.
+# TODO Move this to secure file.
 app.config['SECRET_KEY'] = 'supersecretkey'
 
 
@@ -39,7 +39,6 @@ def index():
     file_urls = session['file_urls']
 
     if request.method == 'POST':
-        print('inPostMethod')
         file_obj = request.files
         for f in file_obj:
             file = request.files.get(f)
@@ -65,18 +64,19 @@ def results():
     session.pop('file_urls', None)
     print(file_urls)
     return deepretrieval(os.path.join('./uploads', file_urls[0].split('/')[-1]))
-    # return render_template('deepretrieval.html',name=file_urls[0])
 
 
 @app.route("/deepretrieval/<string:name>/")
 def deepretrieval(name):
-    match = ig.get_match(name)
+    print("Executing list")
+    match, match_file = ig.get_match(name)
     print('MatherFHFHHFFHHFHF', match[0])
-    random_image = filenames[match[0]]
+    print(match_file)
+    random_image = match_file
     random_image = '/'.join(random_image.split('/')[1:])
     print(random_image)
     return render_template('retrieval_main.html', **locals())
-    # return "Hello World"
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
@@ -87,8 +87,7 @@ if __name__ == "__main__":
         '--create_index', action='store_true', dest='create_index')
     args = parser.parse_args()
     folder_name = args.folder_name
-
-    filenames = glob.glob('static/PetImages/**/*.jpg')
     ig = ImageRetrieval(folder_name)
-    ig.create_index(args.create_index)
+    ig.create_index()
+    ig.index_file_loader()
     app.run(host='0.0.0.0', port=5050, debug=True)
