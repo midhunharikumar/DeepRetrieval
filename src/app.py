@@ -68,9 +68,11 @@ def results():
 
 @app.route("/deepretrieval/<string:name>/")
 def deepretrieval(name):
-    match = ig.get_match(name)
+    print("Executing list")
+    match, match_file = ig.get_match(name)
     print('MatherFHFHHFFHHFHF', match[0])
-    random_image = filenames[match[0]]
+    print(match_file)
+    random_image = match_file
     random_image = '/'.join(random_image.split('/')[1:])
     print(random_image)
     return render_template('retrieval_main.html', **locals())
@@ -86,5 +88,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     folder_name = args.folder_name
     ig = ImageRetrieval(folder_name)
-    ig.create_index(args.create_index)
+    ig.create_index()
+    ig.index_file_loader()
     app.run(host='0.0.0.0', port=5050, debug=True)
