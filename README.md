@@ -10,6 +10,7 @@ Execute the following instructions to generate the index.
 
 1. python ImageRetrieval.py --dataset_folder <local_dataset_folder> --create_index --generate_image_index
 
+<<<<<<< HEAD
 2. python app.py
 
 If you change the local dataset folder of the files within please remember to reindex. It is not nesseary to reindex once you move application to another machine. Provided the file structure stays the same within the database folder.
@@ -18,3 +19,9 @@ If you change the local dataset folder of the files within please remember to re
 
 To add index files for display place them in a folder named static within the src directory. The directory will be used for reading images when the closest match is found. This directory should not be modified without reindexing after. All files within the index need to be present within this folder. The program will check for the indexed files within this directory even if the indexing was done on another machine with a different folder structure. The application looks for only the class name within the folder you have created in the static folder.
 
+=======
+2. python App.py
+
+If you change the local dataset folder of the files within please remember to reindex. It is not nesseary to reindex once you move application to another machine. Provided the file structure stays the same within the database folder.
+
+>>>>>>> c5b3a9dac6d0789cc8005df728bc69dff4b455b3

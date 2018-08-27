@@ -77,6 +77,44 @@ class DeepFeatures():
         pass
 
 
+<<<<<<< HEAD
+=======
+def batch_feature(folder_name):
+    gs = GraphSearch()
+    # TODO Remove all hard links.
+    print(len(files))
+    feature_store = []
+    df = DeepFeatures(feature_type={
+                      'model': 'custom', 'input_layer': 'default', 'output_layer': 'fc2'})
+    # TODO Remove hardcoded value.
+    file_indexes = np.random.choice(len(files), 25000)
+    print(file_indexes.size)
+    # TODO Move batchsize to properties file.
+    batch_size = 128
+    image_batch = []
+    for idx, filenumber in enumerate(file_indexes):
+        print(idx)
+        image_decoded = scipy.ndimage.imread(
+            files[filenumber], flatten=False, mode=None)
+        # TODO Move hardcoded values to properties file.
+        image_decoded = transform.resize(image_decoded, [224, 224, 3])
+        image_decoded = np.expand_dims(image_decoded, axis=0)
+        if image_batch == []:
+            image_batch = image_decoded
+        else:
+            image_batch = np.concatenate((image_batch, image_decoded), axis=0)
+        if (not (idx) % (batch_size)) or (idx >= len(file_indexes) - 1):
+            print(image_batch.shape)
+            feature_store.extend(df.get_feature(image_batch))
+            image_batch = []
+    print('feature_store shape', np.array(feature_store).shape)
+    gs.create_index(np.array(feature_store, np.float32), file_indexes)
+    gs.save_index()
+    query = gs.knn(feature_store[0])
+    print(query)
+
+
+>>>>>>> c5b3a9dac6d0789cc8005df728bc69dff4b455b3
 def single_feature():
 
     gs = GraphSearch()
