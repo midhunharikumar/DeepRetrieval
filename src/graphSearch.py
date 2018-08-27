@@ -4,6 +4,9 @@ import hnswlib
 class GraphSearch():
 
     def __init__(self,):
+        """ Initialize wrapper for HNSWLIB.
+
+        """
         self.index = hnswlib.Index(space='l2', dim=4096)
 
     def create_index(self, items, labels):

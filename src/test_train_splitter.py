@@ -11,6 +11,17 @@ folder_name = '/Users/midhun/Downloads/dog_cat_dataset/PetIMages/'
 
 
 def test_train_split(folder_name):
+    """
+        Helper function to split dataset into test and validation folders.
+        Use this function if image database is not split into test and train.
+        Folder structure is as expected by keras ImageDataGenerator.
+
+        train_dir/<class 1>
+                /<class n>
+
+        val_dir /<class 1>
+                /<class n>
+    """
 
     class_folders = glob.glob(os.path.join(folder_name, '*'))
 

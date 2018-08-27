@@ -1,3 +1,4 @@
+
 from graphSearch import GraphSearch
 from DeepFeatures import DeepFeatures
 import os
@@ -15,16 +16,33 @@ file_list_path = os.path.join(os.getcwd(), file_list_name)
 class ImageRetrieval():
 
     def __init__(self, image_folder_name):
+        """ Returns an ImageRetrieval object.
+        Image retrieval takes a folder and catalogues all images within it. The
+        feature type is hard coded and can be changed if required. The feature 
+        extraction module contains more information of feature settings.
+
+        This module acts as the main function for executing the image retrieval engine.
+
+        Args - image_folder_name : Folder name of images used for index as well
+                                   as retrieval.
+
+        """
         self.gs = GraphSearch()
+        # TODO convert this to argument and move defaults to the parameters
+        # file.
         self.feature_gen = DeepFeatures(feature_type={
             'model': 'custom', 'input_layer': 'default', 'output_layer': 'fc2'})
-
         self.folder_name = image_folder_name
         self.files = glob.glob(os.path.join(self.folder_name, '**/*.jpg'))
         self.num_files = len(self.files)
         print("Number of files", len(self.files))
 
     def create_index(self, create_new=False):
+        """ Loads the image index from disk if it is available.
+
+        Args -  create_new : If True creates a new index using images in input folder.
+
+        """
         self.feature_store = []
         if create_new:
             # Create the index file before creating the features and generating
@@ -38,9 +56,17 @@ class ImageRetrieval():
                                  np.arange(len(self.num_files)))
             self.gs.save_index()
         else:
+            # Load index from disk if available.
             self.gs.load_index()
 
     def get_match(self, image_file):
+        """ Retrieve closest matching image given an input image_file
+
+            Args - image_file : Query image file.
+
+            return - match_idx : Index id of matched image.
+                     self.files[match_idx[0]] : Filename of Matched image.
+        """
         image = self.feature_gen.read_image(image_file)
         feature = self.feature_gen.get_feature(image)
         match_idx = self.gs.knn(feature.ravel())[0][0]
@@ -48,6 +74,10 @@ class ImageRetrieval():
         return match_idx, self.files[match_idx[0]]
 
     def index_file_loader(self):
+        """ Loads the image file list index from disk.
+            Image list index ensures that file modifications do not affect indexing.
+            Index files need to be generated.
+        """
         with open(file_list_path) as file:
             self.file_list = json.loads(file.read())
         self.files = [os.path.join(self.folder_name, self.file_list['index'][
@@ -87,6 +117,8 @@ class ImageRetrieval():
             print('File List saved to ' + file_list_path)
 
     def batch_feature_store(self):
+        """ Function performs batch feature generation for indexing.
+        """
         self.index_file_loader()
         gs = GraphSearch()
         # TODO Remove all hard links.
@@ -117,9 +149,6 @@ class ImageRetrieval():
         print('feature_store shape', np.array(feature_store).shape)
         gs.create_index(np.array(feature_store, np.float32), file_indexes)
         gs.save_index()
-        query = gs.knn(feature_store[0])
-        print(query)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
