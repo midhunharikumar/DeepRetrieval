@@ -10,7 +10,7 @@ Execute the following instructions to generate the index.
 
 1. python ImageRetrieval.py --dataset_folder <local_dataset_folder> --create_index --generate_image_index
 
-<<<<<<< HEAD
+
 2. python app.py
 
 If you change the local dataset folder of the files within please remember to reindex. It is not nesseary to reindex once you move application to another machine. Provided the file structure stays the same within the database folder.
@@ -24,4 +24,3 @@ To add index files for display place them in a folder named static within the sr
 
 If you change the local dataset folder of the files within please remember to reindex. It is not nesseary to reindex once you move application to another machine. Provided the file structure stays the same within the database folder.
 
->>>>>>> c5b3a9dac6d0789cc8005df728bc69dff4b455b3
